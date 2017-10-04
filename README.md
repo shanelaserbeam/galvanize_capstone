@@ -19,3 +19,14 @@ Inverted Pyramid - A structure for writing news articles (among other types of d
 ---
 
 What this project does is replaces the TF part of the TF-IDF weighting schema with one that scores a word based on where it appears in a document.  Earlier appearances of a word are scored higher than later words or appearances of the same word.
+
+---
+#### Further information
+---
+To learn more about how it works, [click here](how_it_works)
+
+To learn more about the code, [click here](code_info)
+
+To learn more about the data set used for testign, [click here](dataset)
+
+To see how it performs for classification, [click here](outcomes)
