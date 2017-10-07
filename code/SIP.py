@@ -12,9 +12,11 @@ class IPvectorizer:
         self.vocab = set()
 
     def get_feature_names(self):
+        #returns feature names
         return [i for i in self.idf]
 
     def get_vocab(self, docs):
+        #gets the tokens used
         temp_vocab = set()
         for doc in docs:
             doc_vocab = [w for w in doc.split(" ") if len(w) > 1]
@@ -24,6 +26,8 @@ class IPvectorizer:
 
 
     def calc_idf(self, docs):
+        #implemented using the method found in sklearn
+        #will be reworked to utilize hashing to speed up performance
         doc_count = len(docs)
         word_idf = defaultdict(lambda: 0)
         for doc in docs:
@@ -119,6 +123,7 @@ class IPvectorizer:
         return normalize(sparse.csr_matrix(temp_matrix_list), axis=1, norm='l2')
 
     def ip_weights(self, doc):
+        #weights the occurances of tokens in a document by the logrithmic forumula
         temp_dict = defaultdict(lambda: 0)
         doc_len = len(doc)
         county = 0

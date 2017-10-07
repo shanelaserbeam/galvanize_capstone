@@ -1,37 +1,44 @@
-# import re
-#
-# from nltk.tokenize import RegexpTokenizer
-# from nltk.corpus.util import LazyCorpusLoader
-# from nltk.corpus.reader import CategorizedPlaintextCorpusReader
-# from nltk import word_tokenize
-# from nltk.stem.porter import PorterStemmer
-# from nltk.corpus import stopwords
-# import re
-
-# cachedStopWords = stopwords.words("english")
+# Data prep for current testing
+# usable in current implementation, but will be optimized later
 
 def train_test_split(min=25):
-    import re
+    '''
+    Gets the train/test set for testing from the Reuters corpus.  Keeps only
+    the documents that have a category in both test and train set, with a
+    possible user defined miniumum number of tokens.
 
+    Parameters:
+    ------------
+    min: (default = 25) The minimum number of tokens in documents to test with.
+
+    Returns:
+    ------------
+    train_set, train_target, test_set, test_target as lists
+    '''
+    #imports
+    import re
     from nltk.tokenize import RegexpTokenizer
     from nltk.corpus.util import LazyCorpusLoader
     from nltk.corpus.reader import CategorizedPlaintextCorpusReader
+
+    #reading corpus
     reuters = LazyCorpusLoader(
     'reuters', CategorizedPlaintextCorpusReader, '(training|test).*',
     cat_file='cats.txt', encoding='ISO-8859-2')
 
     documents = reuters.fileids()
-
+    #spliting into train and test sets
     train_docs_id = list(filter(lambda doc: doc.startswith("train"),
                                 documents))
     test_docs_id = list(filter(lambda doc: doc.startswith("test"),
                                documents))
-
+    #getting documents and their categories
     train_docs = [reuters.raw(doc_id) for doc_id in train_docs_id]
     test_docs = [reuters.raw(doc_id) for doc_id in test_docs_id]
     train_cat = [reuters.categories(doc_id) for doc_id in train_docs_id]
     test_cat = [reuters.categories(doc_id) for doc_id in test_docs_id]
 
+    #formating the train set, tokenizing and gathering stats for processing
     train_token_docs = []
     train_token_docs_length = []
     train_token_docs_unique = []
@@ -41,6 +48,7 @@ def train_test_split(min=25):
         train_token_docs_length.append(len(tempy_tokens))
         train_token_docs_unique.append(len(set(tempy_tokens)))
 
+    #formating the test set, tokenizing and gathering stats for processing
     test_token_docs = []
     test_token_docs_length = []
     test_token_docs_unique = []
@@ -50,6 +58,7 @@ def train_test_split(min=25):
         test_token_docs_length.append(len(tempy_tokens))
         test_token_docs_unique.append(len(set(tempy_tokens)))
 
+    #removes any documents that do not meet the minimum tokens setting
     train_less_than_min = [n for n,i in enumerate(train_token_docs_length) if i < min]
     test_less_than_min = [n for n,i in enumerate(test_token_docs_length) if i < min]
 
@@ -59,7 +68,8 @@ def train_test_split(min=25):
     train_cat_more_than_min = [i for n,i in enumerate(train_cat) if n not in train_less_than_min]
     test_cat_more_than_min = [i for n,i in enumerate(test_cat) if n not in test_less_than_min]
 
-    #getting single cats
+    #getting documents with single categories
+    #(corpus has some with multiple categories)
     cat_count_train = [len(i) for i in train_cat_more_than_min]
     cat_count_test = [len(i) for i in test_cat_more_than_min]
 
