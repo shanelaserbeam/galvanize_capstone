@@ -20,11 +20,13 @@ To illustrate how its different, consider the simple sample document:
 The Term frequency count method (TF) would score this document by first counting the occurances of the word:
 
 (with raw count)
+
 | dog | eat | tasty | dog | food |
 | --- | --- | --- | --- | --- |
 | 1 | 1 | 1 | 1 | 1 |
 
 or with frequency counts
+
 | dog | eat | tasty | dog | food |
 | --- | --- | --- | --- | --- |
 | 0.2 | 0.2 | 0.2 | 0.2 | 0.2 |
